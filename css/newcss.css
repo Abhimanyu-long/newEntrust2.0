@@ -1,0 +1,38 @@
+.loginPage{
+    width: 100%;
+    height: 100vh;
+}
+
+.Carousel{
+    display: flex;
+    width: 100%;
+    padding: 2rem 5rem;
+}
+
+.Carousel .CarouselHeader h1{
+    font-size: 2.5rem;
+    color: white;
+}
+
+.Carousel .Carouselmain .Carouseltextbox .Carouseltextmain p{ 
+    font-size: 1.1rem;
+    color: white;
+}
+
+.entrustlogin{
+  box-shadow:
+    inset 0 -3em 3em rgba(158, 155, 155, 0.3),
+    0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 2em rgba(175, 172, 172, 0.6);
+}
+
+.accreditation{
+    width: 100%;
+    height: 100%;
+}
+
+.accreditation .accreditationimg{
+    width:  100%;
+    height: auto;
+}
+
