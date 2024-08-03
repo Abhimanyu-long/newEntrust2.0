@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
 import { Home } from './Pages/Home';
-import Entrust from './Pages/Entrust';
 
 
 function App() {
@@ -8,8 +8,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Entrust />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />    
       </Routes>
 
     </>

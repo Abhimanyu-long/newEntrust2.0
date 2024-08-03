@@ -17,6 +17,13 @@
 .Carousel .Carouselmain .Carouseltextbox .Carouseltextmain p{ 
     font-size: 1.1rem;
     color: white;
+    width: 100%;
+    height: 10vh;
+}
+
+.Carousel .Carouselmain .Carouseltextbox .Banner{
+    width: 100%;
+    height: 450px;
 }
 
 .entrustlogin{
@@ -36,3 +43,28 @@
     height: auto;
 }
 
+.alert-dark {
+    color: var(--bs-dark);
+    border-color: #c5c7cd;
+    background-color: var(--bs-dark-light);
+    font-weight: 800;
+}
+
+
+.left-fixed-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 850px;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #007bff; /* Assuming bg-primary is this color */
+    z-index: 1;
+  }
+  
+  .right-content {
+    margin-left: 850px; /* Adjust based on the fixed section's width */
+    overflow-y: auto;
+    height: 100vh;
+  }
+  

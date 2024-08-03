@@ -1,20 +1,101 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import neural from "../assets/neural.png";
+import centure from "../assets/20centure.png";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
+import accreditation from "../assets/Accreditation.png";
 
-const Register = () => {
+const API_URL = "http://10.10.7.81:8000/auth";
+
+const Login = () => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [forgot, setForgot] = useState(true);
+  const [forgotemail, setForgotemail] = useState({ email: "" });
+  const [register, setregister] = useState(false);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (forgot) {
+      setCredentials((prev) => ({ ...prev, [name]: value }));
+    } else {
+      setForgotemail((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const json = await response.json();
+      console.log("Response status:", response.status);
+      console.log("Response JSON:", json);
+
+      if (response.ok) {
+        toast.success(json.message || "Login successful!");
+        setTimeout(() => navigate("/home"), 500);
+      } else {
+        toast.error(json.message || "Enter valid credentials");
+      }
+    } catch (error) {
+      toast.error(`Connection error: ${error.message}`);
+    }
+  };
+
+  const handleForgot = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${API_URL}/forgot-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(forgotemail),
+      });
+
+      const json = await response.json();
+      console.log("Response status:", response.status);
+      console.log("Response JSON:", json);
+
+      if (response.ok) {
+        toast.success(json.message || "Reset instructions sent to email");
+        setTimeout(() => navigate("/"), 500);
+      } else {
+        toast.error(json.message || "Enter a valid email");
+      }
+    } catch (error) {
+      toast.error(`Connection error: ${error.message}`);
+    }
+  };
+
+  const toggleForgotPassword = () => setForgot((prev) => !prev);
+
+  const responsive = {
+    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
+    tablet: { breakpoint: { max: 1024, min: 464 }, items: 1 },
+    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+  };
+
+
+  //    register data
+
+  const [credentials1, setCredentials1] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit1 = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("http://10.10.7.81:8000/auth/register", {
@@ -23,9 +104,9 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
+          name: credentials1.name,
+          email: credentials1.email,
+          password: credentials1.password,
         }),
       });
 
@@ -48,18 +129,12 @@ const Register = () => {
   };
 
   const onHandleChange = (event) => {
-    setCredentials({ ...credentials, [event.target.name]: event.target.value });
-  };
-
-  const responsive = {
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 1 },
-    tablet: { breakpoint: { max: 1024, min: 464 }, items: 1 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
+    setCredentials1({ ...credentials, [event.target.name]: event.target.value });
   };
 
   return (
     <>
-      <div className="d-flex flex-column flex-root" id="nit_app_root">
+       <div className="d-flex flex-column flex-root" id="nit_app_root">
         <div className="d-flex flex-column flex-lg-row flex-column-fluid">
           <div className="d-flex flex-column flex-lg-row flex-column-fluid">
             <div className="left-fixed-section">
@@ -104,7 +179,7 @@ const Register = () => {
                 <div className="w-lg-600px p-10 p-lg-5 mx-auto">
                   <form
                     className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework"
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSubmit1}
                   >
                     <div className="mb-10 text-center">
                       <h1 className="text-gray-900 mb-3">Create an Account</h1>{" "}
@@ -138,7 +213,7 @@ const Register = () => {
                             type="name"
                             name="name"
                             required
-                            value={credentials.name}
+                            value={credentials1.name}
                             onChange={onHandleChange}
                             autoComplete="off"
                           />
@@ -153,7 +228,7 @@ const Register = () => {
                             className="form-control form-control-lg form-control-solid"
                             type="email"
                             name="email"
-                            value={credentials.email}
+                            value={credentials1.email}
                             onChange={onHandleChange}
                             required
                             autoComplete="off"
@@ -468,7 +543,7 @@ const Register = () => {
                             className="form-control form-control-lg form-control-solid"
                             type="password"
                             name="password"
-                            value={credentials.password}
+                            value={credentials1.password}
                             onChange={onHandleChange}
                             required="required"
                             autoComplete="off"
@@ -565,48 +640,17 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
 
-// <div className="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px">
-// <div className="d-flex flex-row-fluid flex-center flex-column text-center p-0 p-lg-0">
-//   <a href="" className="py-7 pt-lg-7">
-//     <img
-//       alt="Logo"
-//       src={entrust}
-//       className="h-85px"
-//     />
-//   </a>
-//   <h1 className="d-none d-lg-block fw-bold fs-2qx pb-5 pb-md-50" style={{color:"white"}}>
-//     Entrust 2.0
-//   </h1>
-//   <p
-//     className="d-none d-lg-block fs-3 text-align-left"
-//     style={{ textAlign: "left" ,color:"white"}}
-//   >
-//     <br />
-//     <br />
-//     <p className="nit-dt">HELLO WORLD</p>
-//     <i className="nit-dt nit-check fs-2x text-success"></i>ISO 27001
-//     Certified, HIPAA & GDPR Compliant
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success "></i>
-//     Multi-tier quality assurance
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>Per case
-//     fees, No fixed costs
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>Special
-//     Rates by matter types
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>No
-//     additional fees for rush matters
-//   </p>
-// </div>
-// <div
-//   className="d-none d-lg-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-250px min-h-lg-350px mb-0"
-//   style={{
-//     backgroundImage:
-//       "url(https://www.neuralit.com/sites/default/files/2024-05/Website%20hero%20banner_2.png)",
-//   }}
-// ></div>
-// </div>
+
+
+
+
+
+
+
+
+
+
+
+

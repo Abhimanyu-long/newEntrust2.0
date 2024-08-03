@@ -9652,7 +9652,7 @@ body.swal2-toast-shown .swal2-container.swal2-bottom-right {
     left: 0;
 }
 .nit-check:before {
-    content: "\eabc";
+    content: "\eabc" !important;
 }
 .nit-cheque .path1:before {
     content: "\eabd";
