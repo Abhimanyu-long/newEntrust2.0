@@ -1,6 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
+import Register from './components/Register';
 import Login from './components/Login';
-import { Home } from './Pages/Home';
+import { Dashboard } from './Pages/Dashboard';
+import { Test } from './Pages/Test';
+import Forgot from './components/Forgot';
 
 
 function App() {
@@ -9,7 +12,10 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />    
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/forgot" element={<Forgot />} />
       </Routes>
 
     </>

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import '../css/global.css'
-import '../css/custom.css'
+// import '../css/custom.css'
 import '../css/newcss.css'
 import { BrowserRouter } from 'react-router-dom';
 
