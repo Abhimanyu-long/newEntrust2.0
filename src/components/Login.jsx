@@ -8,7 +8,7 @@ import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
 import accreditation from "../assets/Accreditation.png";
 
-const API_URL = "http://10.10.0.29:8000/";
+const API_URL = "http://10.10.7.81:8000/auth";
 
 const Login = () => {
   const navigate = useNavigate();

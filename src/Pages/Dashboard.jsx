@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 import logo from "../assets/media/logos/neuralit-logo.png";
 import userProfile from "../assets/media/users/user-profile.jpg";
 import menuHeaderBg from "../assets/media/misc/menu-header-bg.jpg";
@@ -9,6 +11,7 @@ import accountManager from "../assets/media/widgets/account-manager.jpg";
 import autopay from "../assets/media/widgets/autopay.png";
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
   const [themeMode, setThemeMode] = useState("light");
   const [showQuickActionModal, setShowQuickActionModal] = useState(false);
   const [showCurrentOfferModal, setShowCurrentOfferModal] = useState(false);
@@ -49,6 +52,22 @@ export const Dashboard = () => {
       document.documentElement.setAttribute("data-bs-theme", themeMode);
     }
   }, []);
+
+  const logoutfunction= async ()=>{
+    const response = await fetch("http://10.10.7.81:8000/auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+
+    const json = await response.json();
+    console.log(json);
+
+    toast.success(json.message);
+    setTimeout(() => navigate("/"), 500);
+
+  }
 
   return (
     <>
@@ -1184,7 +1203,7 @@ export const Dashboard = () => {
                     </div>
                   </div>
 
-                  <div className="me-2">
+                  <div className="me-2" >
                     <a
                       href="#"
                       className="app-sidebar-username text-gray-800 text-hover-primary fs-6 fw-semibold lh-0"
@@ -1198,7 +1217,7 @@ export const Dashboard = () => {
                 </div>
 
                 <a
-                  href="#"
+                 onClick={logoutfunction}
                   className="btn btn-icon btn-active-color-primary btn-icon-custom-color me-n4"
                   data-bs-toggle="tooltip"
                   title="Logout"
@@ -3222,6 +3241,10 @@ export const Dashboard = () => {
           </i>
         </div>
       </div>
+
+
+
+      <Toaster />
     </>
   );
 };

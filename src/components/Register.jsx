@@ -69,7 +69,7 @@ const Register = () => {
       return;
     }
     try {
-      const response = await fetch("http://10.10.0.29:8000/register", {
+      const response = await fetch("http://10.10.7.81:8000/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -82,8 +82,8 @@ const Register = () => {
       });
 
       const json = await response.json();
-      // console.log("Response status:", response.status);
-      // console.log("Response JSON:", json);
+      console.log("Response status:", response.status);
+      console.log("Response JSON:", json);
 
       if (response.ok) {
         toast.success(json.message || "Registration successful!");
@@ -114,7 +114,7 @@ const Register = () => {
       <div className="d-flex flex-column flex-root" id="nit_app_root">
         <div className="d-flex flex-column flex-lg-row flex-column-fluid">
           <div className="d-flex flex-column flex-lg-row flex-column-fluid">
-            <div className="left-fixed-section">
+            <div className="left-fixed-section  Carousel-mobile">
               <div className="d-flex flex-column flex-lg-row-auto position-xl-relative Carousel">
                 <div className="CarouselHeader">
                   <h1>Entrust 2.0</h1>
@@ -153,7 +153,7 @@ const Register = () => {
 
             <div className="right-content d-flex flex-column flex-lg-row-fluid py-10">
               <div className="d-flex flex-center flex-column flex-column-fluid">
-                <div className="w-lg-600px p-10 p-lg-5 mx-auto">
+                <div className="w-lg-600px p-2 p-lg-5 mx-auto">
                   <form
                     className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework"
                     onSubmit={handleSubmit}
@@ -182,7 +182,7 @@ const Register = () => {
                       <div className="row fv-row mb-7 fv-plugins-icon-container">
                         <div className="col-xl-6">
                           <label className="form-label fw-bold text-gray-900 fs-6">
-                            Username *
+                            User Name *
                           </label>
                           <input
                             placeholder="enter user name"
@@ -193,7 +193,7 @@ const Register = () => {
                             value={credentials.name}
                             onChange={onHandleChange}
                             autoComplete="off"
-                            ref={nameRef} 
+                            ref={nameRef}
                           />
                           {errors.name && (
                             <p style={{ color: "red" }}>{errors.name}</p>
@@ -202,7 +202,7 @@ const Register = () => {
                         </div>
                         <div className="col-xl-6">
                           <label className="form-label fw-bold text-gray-900 fs-6">
-                            E-mail address *
+                            E-mail Address *
                           </label>
                           <input
                             placeholder="Enter Email"
@@ -224,7 +224,7 @@ const Register = () => {
                       <div className="row fv-row mb-7 fv-plugins-icon-container">
                         <div className="col-xl-6">
                           <label className="form-label fw-bold text-gray-900 fs-6">
-                            Fullname *
+                            Full Name *
                           </label>
                           <input
                             placeholder="enter full name"
@@ -256,7 +256,17 @@ const Register = () => {
                             className="form-check-input"
                             type="checkbox"
                             name="toc"
-                            value="1"
+                            onFocus={(e) => {
+                              e.target.style.border = "1px solid black";
+                              e.target.style.padding = "1px";
+                              e.target.style.boxShadow =
+                                "0 0 5px rgba(0, 0, 0, 0.5)";
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.border = "";
+                              e.target.style.padding = "";
+                              e.target.style.boxShadow = "";
+                            }}
                           />
                           <span className="form-check-label fw-semibold text-gray-700 fs-6">
                             I am Authorized Signatory
@@ -495,11 +505,21 @@ const Register = () => {
 
                       <div className="fv-row mb-10 fv-plugins-icon-container">
                         <label className="form-check form-check-custom form-check-solid form-check-inline">
-                          <input
+                        <input
                             className="form-check-input"
                             type="checkbox"
                             name="toc"
-                            value="1"
+                            onFocus={(e) => {
+                              e.target.style.border = "1px solid black";
+                              e.target.style.padding = "1px";
+                              e.target.style.boxShadow =
+                                "0 0 5px rgba(0, 0, 0, 0.5)";
+                            }}
+                            onBlur={(e) => {
+                              e.target.style.border = "";
+                              e.target.style.padding = "";
+                              e.target.style.boxShadow = "";
+                            }}
                           />
                           <span className="form-check-label fw-semibold text-gray-700 fs-6">
                             I agree to receive communications from Neural IT*{" "}

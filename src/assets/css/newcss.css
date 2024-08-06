@@ -47,7 +47,8 @@
     color: var(--bs-dark);
     border-color: #c5c7cd;
     background-color: var(--bs-dark-light);
-    font-weight: 800;
+    font-weight: 550;
+    font-size: 1.2rem;
 }
 
 
@@ -122,6 +123,7 @@
    .Carousel-mobile{
     display: none !important;
    }
+
 }
   
 
