@@ -4,8 +4,7 @@ const Forgot = () => {
   return (
     <div className="d-flex flex-column flex-root" id="nit_app_root">
       <form
-        className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework"
-       
+        className="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" 
       >
         {/* Heading */}
         <div className="text-center mb-10">

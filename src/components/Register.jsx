@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-// import entrust from "../assets/logos/neuralit-logo.png"
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
@@ -15,10 +14,62 @@ const Register = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const validate = () => {
+    let isValid = true;
+    let errors = {};
+
+    if (!credentials.name.trim() || credentials.name.trim().length < 2) {
+      errors.name = "Name is required and must be at least 2 characters long";
+      isValid = false;
+      nameRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!credentials.email) {
+      errors.email = "Email is required";
+      isValid = false;
+      if (isValid) emailRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (!emailRegex.test(credentials.email)) {
+      errors.email = "Email is not valid";
+      isValid = false;
+      if (isValid) emailRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    if (!credentials.password) {
+      errors.password = "Password is required";
+      isValid = false;
+      if (isValid) passwordRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (credentials.password.length < 8) {
+      errors.password = "Password must be at least 8 characters";
+      isValid = false;
+      if (isValid) passwordRef.current.scrollIntoView({ behavior: "smooth" });
+    } else if (/\s/.test(credentials.password)) {
+      errors.password = "Password must not contain spaces";
+      isValid = false;
+      if (isValid) passwordRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+
+    setErrors(errors);
+    return isValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validate()) {
+      return;
+    }
     try {
-      const response = await fetch("http://10.10.7.81:8000/auth/register", {
+      const response = await fetch("http://10.10.0.29:8000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,13 +85,13 @@ const Register = () => {
       // console.log("Response status:", response.status);
       // console.log("Response JSON:", json);
 
-      // toast(json.detail);
-
       if (response.ok) {
         toast.success(json.message || "Registration successful!");
         setTimeout(() => {
           navigate("/");
         }, 500);
+      } else {
+        toast.error(json.detail || "Registration failed");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -142,7 +193,11 @@ const Register = () => {
                             value={credentials.name}
                             onChange={onHandleChange}
                             autoComplete="off"
+                            ref={nameRef} 
                           />
+                          {errors.name && (
+                            <p style={{ color: "red" }}>{errors.name}</p>
+                          )}
                           <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                         </div>
                         <div className="col-xl-6">
@@ -158,7 +213,11 @@ const Register = () => {
                             onChange={onHandleChange}
                             required
                             autoComplete="off"
+                            ref={emailRef}
                           />
+                          {errors.email && (
+                            <p style={{ color: "red" }}>{errors.email}</p>
+                          )}
                           <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                         </div>
                       </div>
@@ -473,7 +532,11 @@ const Register = () => {
                             onChange={onHandleChange}
                             required="required"
                             autoComplete="off"
+                            ref={passwordRef}
                           />
+                          {errors.password && (
+                            <p style={{ color: "red" }}>{errors.password}</p>
+                          )}
                           <span
                             className="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
                             data-nit-password-meter-control="visibility"
@@ -498,20 +561,6 @@ const Register = () => {
                       </div>
                       <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                     </div>
-
-                    {/* <div className="fv-row mb-5 fv-plugins-icon-container">
-                  <label className="form-label fw-bold text-gray-900 fs-6">
-                    Confirm Password
-                  </label>
-                  <input
-                    placeholder="confirm password"
-                    className="form-control form-control-lg form-control-solid"
-                    type="password"
-                    name="confirm-password"
-                    autoComplete="off"
-                  />
-                  <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                </div> */}
 
                     <div className="text-center">
                       <button
@@ -567,47 +616,3 @@ const Register = () => {
 };
 
 export default Register;
-
-// <div className="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px">
-// <div className="d-flex flex-row-fluid flex-center flex-column text-center p-0 p-lg-0">
-//   <a href="" className="py-7 pt-lg-7">
-//     <img
-//       alt="Logo"
-//       src={entrust}
-//       className="h-85px"
-//     />
-//   </a>
-//   <h1 className="d-none d-lg-block fw-bold fs-2qx pb-5 pb-md-50" style={{color:"white"}}>
-//     Entrust 2.0
-//   </h1>
-//   <p
-//     className="d-none d-lg-block fs-3 text-align-left"
-//     style={{ textAlign: "left" ,color:"white"}}
-//   >
-//     <br />
-//     <br />
-//     <p className="nit-dt">HELLO WORLD</p>
-//     <i className="nit-dt nit-check fs-2x text-success"></i>ISO 27001
-//     Certified, HIPAA & GDPR Compliant
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success "></i>
-//     Multi-tier quality assurance
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>Per case
-//     fees, No fixed costs
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>Special
-//     Rates by matter types
-//     <br />
-//     <i className="nit-dt nit-check fs-2x text-success"></i>No
-//     additional fees for rush matters
-//   </p>
-// </div>
-// <div
-//   className="d-none d-lg-flex flex-row-auto bgi-no-repeat bgi-position-x-center bgi-size-contain bgi-position-y-bottom min-h-250px min-h-lg-350px mb-0"
-//   style={{
-//     backgroundImage:
-//       "url(https://www.neuralit.com/sites/default/files/2024-05/Website%20hero%20banner_2.png)",
-//   }}
-// ></div>
-// </div>

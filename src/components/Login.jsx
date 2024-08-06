@@ -8,7 +8,7 @@ import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
 import accreditation from "../assets/Accreditation.png";
 
-const API_URL = "http://10.10.7.81:8000/auth";
+const API_URL = "http://10.10.0.29:8000/";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,8 +25,33 @@ const Login = () => {
     }
   };
 
+  const validateCredentials = ({ email, password }) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+    if (forgot && (!password || password.includes(" "))) {
+      toast.error("Password cannot be empty or contain spaces");
+      return false;
+    }
+    return true;
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateCredentials(credentials)) {
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
@@ -53,6 +78,9 @@ const Login = () => {
 
   const handleForgot = async (e) => {
     e.preventDefault();
+    if (!validateEmail(forgotemail.email)) {
+      return;
+    }
     try {
       const response = await fetch(`${API_URL}/forgot-password`, {
         method: "POST",
@@ -96,8 +124,7 @@ const Login = () => {
         </header>
 
         <div className="d-flex flex-column flex-lg-row flex-column-fluid">
-          {/* Aside */}
-          <div className="d-flex flex-column flex-lg-row-auto bg-primary w-xl-900px position-xl-relative Carousel">
+          <div className="d-flex flex-column flex-lg-row-auto bg-primary w-xl-900px position-xl-relative Carousel  Carousel-mobile">
             <div className="CarouselHeader">
               <h1>Entrust 2.0</h1>
             </div>
@@ -118,8 +145,6 @@ const Login = () => {
                   <div className="Carouseltextbox" key={item.id}>
                     <div className="Carouseltextmain">
                       <p>{item.text}</p>
-                    
-                  
                     </div>
                     <img src={item.url} alt="Banner" width={900} height={450} className="Banner"/>
                   </div>
@@ -128,7 +153,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Body */}
           <div className="d-flex flex-column flex-lg-row-fluid py-10 entrustlogin">
             {/* Content */}
             <div className="d-flex flex-center flex-column flex-column-fluid">
@@ -198,7 +222,7 @@ const Login = () => {
             </div>
 
             {/* Footer */}
-            <div className="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
+            <div className="d-flex flex-center flex-wrap fs-6 p-5 pb-0  footer-mobile">
               <div className="d-flex flex-center fw-semibold fs-6">
                 <a href="https://www.neuralit.com/about-us" className="text-muted text-hover-primary px-2" target="_blank" rel="noopener noreferrer">About</a>
                 <a href="https://www.neuralit.com/terms-of-use" className="text-muted text-hover-primary px-2" target="_blank" rel="noopener noreferrer">Terms of Use</a>

@@ -1,0 +1,129 @@
+.loginPage{
+    width: 100%;
+    height: 100vh;
+}
+
+.Carousel{
+    display: flex;
+    width: 100%;
+    padding: 2rem 5rem;
+}
+
+.Carousel .CarouselHeader h1{
+    font-size: 2.5rem;
+    color: white;
+}
+
+.Carousel .Carouselmain .Carouseltextbox .Carouseltextmain p{ 
+    font-size: 1.1rem;
+    color: white;
+    width: 100%;
+    height: 10vh;
+}
+
+.Carousel .Carouselmain .Carouseltextbox .Banner{
+    width: 100%;
+    height: 450px;
+}
+
+.entrustlogin{
+  box-shadow:
+    inset 0 -3em 3em rgba(158, 155, 155, 0.3),
+    0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 2em rgba(175, 172, 172, 0.6);
+}
+
+.accreditation{
+    width: 100%;
+    height: 100%;
+}
+
+.accreditation .accreditationimg{
+    width:  100%;
+    height: auto;
+}
+
+.alert-dark {
+    color: var(--bs-dark);
+    border-color: #c5c7cd;
+    background-color: var(--bs-dark-light);
+    font-weight: 800;
+}
+
+
+
+
+.left-fixed-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 850px;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #4fc9da; /* Assuming bg-primary is this color */
+    z-index: 1;
+  }
+  
+  .right-content {
+    margin-left: 850px; /* Adjust based on the fixed section's width */
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  /* Default styling for large devices */
+.left-fixed-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 850px;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #4fc9da; /* Assuming bg-primary is this color */
+    z-index: 1;
+  }
+  
+  .right-content {
+    margin-left: 850px; /* Adjust based on the fixed section's width */
+    overflow-y: auto;
+    height: 100vh;
+    padding: 20px; /* Optional: add padding for better aesthetics */
+  }
+  
+  /* For tablets */
+  @media (max-width: 991px) {
+    .left-fixed-section {
+      position: static;
+      width: 100%;
+      height: auto;
+    }
+  
+    .right-content {
+      margin-left: 0;
+      padding: 20px;
+    }
+  }
+  
+  /* For mobile devices */
+  @media (max-width: 767px) {
+    .left-fixed-section {
+      position: static;
+      width: 100%;
+      height: auto;
+    }
+  
+    .right-content {
+      margin-left: 0;
+      padding: 10px;
+    }
+  }
+
+
+@media (max-width: 767px) {
+   .Carousel-mobile{
+    display: none !important;
+   }
+}
+  
+
+
+  

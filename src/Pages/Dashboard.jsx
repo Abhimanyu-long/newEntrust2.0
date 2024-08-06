@@ -6,7 +6,7 @@ import logoLight from "../assets/media/logos/neuralit-logo.png";
 import logoDark from "../assets/media/logos/neuralit-logo-dark.png";
 import chart2 from "../assets/media/charts/chart2.jpg";
 import accountManager from "../assets/media/widgets/account-manager.jpg";
-import autopayImage from "../assets/media/widgets/autopay.png";
+import autopay from "../assets/media/widgets/autopay.png";
 
 export const Dashboard = () => {
   const [themeMode, setThemeMode] = useState("light");
