@@ -1,24 +1,16 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const { register } = useAuth();
+  const [credentials, setCredentials] = useState({ name: "", email: "", password: "" });
+  const [errors, setErrors] = useState({ name: "", email: "", password: "" });
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
@@ -69,29 +61,13 @@ const Register = () => {
       return;
     }
     try {
-      const response = await fetch("http://10.10.7.81:8000/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
-        }),
-      });
+      const response = await register(credentials);
 
-      const json = await response.json();
-      console.log("Response status:", response.status);
-      console.log("Response JSON:", json);
-
-      if (response.ok) {
-        toast.success(json.message || "Registration successful!");
-        setTimeout(() => {
-          navigate("/");
-        }, 500);
+      if (response.status === 200) {
+        toast.success(response.data.message || "Registration successful!");
+        setTimeout(() => navigate("/"), 500);
       } else {
-        toast.error(json.detail || "Registration failed");
+        toast.error(response.data.detail || "Registration failed");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -109,12 +85,17 @@ const Register = () => {
     mobile: { breakpoint: { max: 464, min: 0 }, items: 1 },
   };
 
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
+
   return (
     <>
       <div className="d-flex flex-column flex-root" id="nit_app_root">
         <div className="d-flex flex-column flex-lg-row flex-column-fluid">
           <div className="d-flex flex-column flex-lg-row flex-column-fluid">
-            <div className="left-fixed-section  Carousel-mobile">
+            <div className="left-fixed-section Carousel-mobile">
               <div className="d-flex flex-column flex-lg-row-auto position-xl-relative Carousel">
                 <div className="CarouselHeader">
                   <h1>Entrust 2.0</h1>
@@ -169,7 +150,6 @@ const Register = () => {
                       </div>
                     </div>
 
-                    {/* new section */}
                     <div className="alert alert-dark">
                       <div className="fv-row mb-10 fv-plugins-icon-container ">
                         <p
@@ -185,7 +165,7 @@ const Register = () => {
                             User Name *
                           </label>
                           <input
-                            placeholder="enter user name"
+                            placeholder="Enter User Name"
                             className="form-control form-control-lg form-control-solid"
                             type="name"
                             name="name"
@@ -221,13 +201,14 @@ const Register = () => {
                           <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                         </div>
                       </div>
+
                       <div className="row fv-row mb-7 fv-plugins-icon-container">
                         <div className="col-xl-6">
                           <label className="form-label fw-bold text-gray-900 fs-6">
                             Full Name *
                           </label>
                           <input
-                            placeholder="enter full name"
+                            placeholder="Enter Full Name"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -240,7 +221,7 @@ const Register = () => {
                             Job Title
                           </label>
                           <input
-                            placeholder="enter title"
+                            placeholder="Enter Title"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="last-name"
@@ -267,6 +248,7 @@ const Register = () => {
                               e.target.style.padding = "";
                               e.target.style.boxShadow = "";
                             }}
+                            onChange={handleCheckboxChange}
                           />
                           <span className="form-check-label fw-semibold text-gray-700 fs-6">
                             I am Authorized Signatory
@@ -275,53 +257,56 @@ const Register = () => {
                         <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                       </div>
 
-                      <div className="row fv-row mb-7 fv-plugins-icon-container">
-                        <div className="col-xl-6">
-                          <label className="form-label fw-bold text-gray-900 fs-6">
-                            Authorized Signatory Fullname
-                          </label>
-                          <input
-                            placeholder="enter authorized signatory fullname"
-                            className="form-control form-control-lg form-control-solid"
-                            type="text"
-                            name="first-name"
-                            autoComplete="off"
-                          />
-                          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                        </div>
-                        <div className="col-xl-6">
-                          <label className="form-label fw-bold text-gray-900 fs-6">
-                            Authorized Signatory Job Title
-                          </label>
-                          <input
-                            placeholder="enter authorized signatory job title"
-                            className="form-control form-control-lg form-control-solid"
-                            type="text"
-                            name="last-name"
-                            autoComplete="off"
-                          />
-                          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                        </div>
-                      </div>
+                      {isChecked && (
+                        <>
+                          <div className="row fv-row mb-7 fv-plugins-icon-container">
+                            <div className="col-xl-6">
+                              <label className="form-label fw-bold text-gray-900 fs-6">
+                                Authorized Signatory Fullname
+                              </label>
+                              <input
+                                placeholder="Enter Authorized Signatory Full Name"
+                                className="form-control form-control-lg form-control-solid"
+                                type="text"
+                                name="first-name"
+                                autoComplete="off"
+                              />
+                              <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                            </div>
+                            <div className="col-xl-6">
+                              <label className="form-label fw-bold text-gray-900 fs-6">
+                                Authorized Signatory Job Title
+                              </label>
+                              <input
+                                placeholder="Enter Authorized Signatory Job Title"
+                                className="form-control form-control-lg form-control-solid"
+                                type="text"
+                                name="last-name"
+                                autoComplete="off"
+                              />
+                              <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                            </div>
+                          </div>
 
-                      <div className="row fv-row mb-7 fv-plugins-icon-container">
-                        <div className="col-xl-6">
-                          <label className="form-label fw-bold text-gray-900 fs-6">
-                            Authorized Signatory E-MAIL ADDRESS
-                          </label>
-                          <input
-                            placeholder="enter authorized signatory email address"
-                            className="form-control form-control-lg form-control-solid"
-                            type="text"
-                            name="last-name"
-                            autoComplete="off"
-                          />
-                          <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
-                        </div>
-                      </div>
+                          <div className="row fv-row mb-7 fv-plugins-icon-container">
+                            <div className="col-xl-6">
+                              <label className="form-label fw-bold text-gray-900 fs-6">
+                                Authorized Signatory E-MAIL ADDRESS
+                              </label>
+                              <input
+                                placeholder="Enter Authorized Signatory Email Address"
+                                className="form-control form-control-lg form-control-solid"
+                                type="text"
+                                name="email-address"
+                                autoComplete="off"
+                              />
+                              <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
 
-                    {/* new section */}
                     <div className="alert alert-dark fv-row mb-10 ">
                       <div className="fv-row mb-10 fv-plugins-icon-container">
                         <p
@@ -337,7 +322,7 @@ const Register = () => {
                             Organization/Firm
                           </label>
                           <input
-                            placeholder="enter organization/firm"
+                            placeholder="Enter Organization/Firm"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -353,7 +338,7 @@ const Register = () => {
                             Address Line1
                           </label>
                           <input
-                            placeholder="enter address"
+                            placeholder="Enter Address"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -366,7 +351,7 @@ const Register = () => {
                             Address Line2
                           </label>
                           <input
-                            placeholder="enter address"
+                            placeholder="Enter Address"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="last-name"
@@ -382,7 +367,7 @@ const Register = () => {
                             Postal Code
                           </label>
                           <input
-                            placeholder="enter postal code"
+                            placeholder="Enter Postal Code"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -395,7 +380,7 @@ const Register = () => {
                             Country
                           </label>
                           <input
-                            placeholder="enter country"
+                            placeholder="Enter Country"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="last-name"
@@ -411,7 +396,7 @@ const Register = () => {
                             State
                           </label>
                           <input
-                            placeholder="enter state"
+                            placeholder="Enter State"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -424,7 +409,7 @@ const Register = () => {
                             City
                           </label>
                           <input
-                            placeholder="enter city"
+                            placeholder="Enter City"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="last-name"
@@ -440,7 +425,7 @@ const Register = () => {
                             Contact No
                           </label>
                           <input
-                            placeholder="enter contact no."
+                            placeholder="Enter Contact No."
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -453,7 +438,7 @@ const Register = () => {
                             Website
                           </label>
                           <input
-                            placeholder="enter website"
+                            placeholder="Enter Website"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="last-name"
@@ -464,11 +449,10 @@ const Register = () => {
                       </div>
                     </div>
 
-                    {/* new section */}
                     <div className="alert alert-dark">
                       <div className="fv-row mb-10 fv-plugins-icon-container">
                         <p
-                          className="alert alert-dark fs-8 bg-primary"
+                          className="alert alert-dark bg-primary"
                           style={{ background: "#f4f4f4" }}
                         >
                           Activation Code / Promo Code
@@ -481,7 +465,7 @@ const Register = () => {
                             Activation Code / Promo Code
                           </label>
                           <input
-                            placeholder="enter code"
+                            placeholder="Enter Code"
                             className="form-control form-control-lg form-control-solid"
                             type="text"
                             name="first-name"
@@ -492,11 +476,10 @@ const Register = () => {
                       </div>
                     </div>
 
-                    {/* new section */}
                     <div className="alert alert-dark">
                       <div className="fv-row mb-10 fv-plugins-icon-container">
                         <p
-                          className="alert alert-dark fs-8 bg-primary"
+                          className="alert alert-dark bg-primary"
                           style={{ background: "#f4f4f4" }}
                         >
                           Privacy{" "}
@@ -505,7 +488,7 @@ const Register = () => {
 
                       <div className="fv-row mb-10 fv-plugins-icon-container">
                         <label className="form-check form-check-custom form-check-solid form-check-inline">
-                        <input
+                          <input
                             className="form-check-input"
                             type="checkbox"
                             name="toc"
@@ -533,7 +516,6 @@ const Register = () => {
                       </div>
                     </div>
 
-                    {/* this is bottom */}
                     <div
                       className="mb-10 fv-row fv-plugins-icon-container"
                       data-nit-password-meter="true"
@@ -544,7 +526,7 @@ const Register = () => {
                         </label>
                         <div className="position-relative mb-3">
                           <input
-                            placeholder="create password"
+                            placeholder="Create Password"
                             className="form-control form-control-lg form-control-solid"
                             type="password"
                             name="password"

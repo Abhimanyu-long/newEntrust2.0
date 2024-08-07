@@ -120,6 +120,29 @@
 
 
 @media (max-width: 767px) {
+  .login-header{
+    margin: 0;
+    padding: 0;
+  }
+
+  .login-header .login-header-box{
+    margin: 0;
+    padding: 0.3rem;
+    display: flex;
+    justify-content: space-between ;
+    align-items: center;
+  }
+
+  .login-header .login-header-box .header-box-neural-logo{
+   width: 100px;
+   height: auto;
+  }
+
+  .login-header .login-header-box .header-box-Centure-logo{
+    width: 40px;
+    height: auto;
+   }
+
    .Carousel-mobile{
     display: none !important;
    }

@@ -7,11 +7,11 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "./bannerdata";
 import accreditation from "../assets/Accreditation.png";
-
-const API_URL = "http://10.10.7.81:8000/auth";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { loginWithEmail, forgotPassword } = useAuth();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [forgot, setForgot] = useState(true);
   const [forgotemail, setForgotemail] = useState({ email: "" });
@@ -53,26 +53,15 @@ const Login = () => {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      const json = await response.json();
-      console.log("Response status:", response.status);
-      console.log("Response JSON:", json);
-
-      if (response.ok) {
-        toast.success(json.message || "Login successful!");
+      const response = await loginWithEmail(credentials);
+      if (response.status === 200) {
+        toast.success(response.data.message || "Login successful!");
         setTimeout(() => navigate("/dashboard"), 500);
       } else {
-        toast.error(json.message || "Enter valid credentials");
+        toast.error(response.data.message || "Enter valid credentials");
       }
     } catch (error) {
-      toast.error(`Connection error: ${error.message}`);
+      toast.error(error.message);
     }
   };
 
@@ -82,26 +71,15 @@ const Login = () => {
       return;
     }
     try {
-      const response = await fetch(`${API_URL}/forgot-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(forgotemail),
-      });
-
-      const json = await response.json();
-      console.log("Response status:", response.status);
-      console.log("Response JSON:", json);
-
-      if (response.ok) {
-        toast.success(json.message || "Reset instructions sent to email");
+      const response = await forgotPassword(forgotemail.email);
+      if (response.status === 200) {
+        toast.success(response.data.message || "Reset instructions sent to email");
         setTimeout(() => navigate("/"), 500);
       } else {
-        toast.error(json.message || "Enter a valid email");
+        toast.error(response.data.message || "Enter a valid email");
       }
     } catch (error) {
-      toast.error(`Connection error: ${error.message}`);
+      toast.error(error.message);
     }
   };
 
@@ -116,15 +94,15 @@ const Login = () => {
   return (
     <>
       <div className="d-flex flex-column flex-root loginPage" id="nit_app_root">
-        <header>
-          <div className="d-flex flex-row px-14 mt-2 justify-content-between align-items-center">
-            <img src={neural} alt="Neural IT Logo" width={200} height={65} />
-            <img src={centure} alt="20 Centure Logo" width={80} height={70} />
+        <header className="login-header">
+          <div className="d-flex flex-row px-14 mt-2 justify-content-between align-items-center login-header-box">
+            <img src={neural} alt="Neural IT Logo" width={200} height={65} className="header-box-neural-logo"/>
+            <img src={centure} alt="20 Centure Logo" width={80} height={70} className="header-box-Centure-logo"/>
           </div>
         </header>
 
         <div className="d-flex flex-column flex-lg-row flex-column-fluid">
-          <div className="d-flex flex-column flex-lg-row-auto bg-primary w-xl-900px position-xl-relative Carousel  Carousel-mobile">
+          <div className="d-flex flex-column flex-lg-row-auto bg-primary w-xl-900px position-xl-relative Carousel Carousel-mobile">
             <div className="CarouselHeader">
               <h1>Entrust 2.0</h1>
             </div>
@@ -154,11 +132,9 @@ const Login = () => {
           </div>
 
           <div className="d-flex flex-column flex-lg-row-fluid py-10 entrustlogin">
-            {/* Content */}
             <div className="d-flex flex-center flex-column flex-column-fluid">
               <div className="w-lg-500px p-10 p-lg-15 mx-auto">
                 <form className="form w-100" onSubmit={forgot ? handleSubmit : handleForgot}>
-                  {/* Heading */}
                   <div className="text-center mb-10">
                     <h1 className="text-gray-900 mb-3">{forgot ? "Sign In to Entrust" : "Forgot Password?"}</h1>
                     {forgot && (
@@ -168,7 +144,6 @@ const Login = () => {
                     )}
                   </div>
 
-                  {/* Input group: Email */}
                   <div className="fv-row mb-10">
                     <label className="form-label fs-6 fw-bold text-gray-900">Email</label>
                     <input
@@ -182,7 +157,6 @@ const Login = () => {
                     />
                   </div>
 
-                  {/* Input group: Password (only for login) */}
                   {forgot && (
                     <div className="fv-row mb-10">
                       <div className="d-flex flex-stack mb-2">
@@ -202,7 +176,6 @@ const Login = () => {
                     </div>
                   )}
 
-                  {/* Actions */}
                   <div className="text-center">
                     <button className="btn btn-lg btn-primary w-100 mb-5">
                       <span className="indicator-label">{forgot ? "Continue" : "Submit"}</span>
@@ -221,8 +194,7 @@ const Login = () => {
               <img src={accreditation} alt="Accreditation" width={500} height={100} className="accreditationimg" />
             </div>
 
-            {/* Footer */}
-            <div className="d-flex flex-center flex-wrap fs-6 p-5 pb-0  footer-mobile">
+            <div className="d-flex flex-center flex-wrap fs-6 p-5 pb-0 footer-mobile">
               <div className="d-flex flex-center fw-semibold fs-6">
                 <a href="https://www.neuralit.com/about-us" className="text-muted text-hover-primary px-2" target="_blank" rel="noopener noreferrer">About</a>
                 <a href="https://www.neuralit.com/terms-of-use" className="text-muted text-hover-primary px-2" target="_blank" rel="noopener noreferrer">Terms of Use</a>
@@ -232,7 +204,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-
       <Toaster />
     </>
   );
