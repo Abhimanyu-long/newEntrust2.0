@@ -1,5 +1,5 @@
 // src/context/AuthContext.js
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 
 const API_URL = "http://10.10.7.81:8000/auth";
@@ -9,14 +9,18 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const loginWithEmail = async (data) => {
     try {
       const response = await axios.post(`${API_URL}/login`, data, {
         headers: { "Content-Type": "application/json" },
       });
+      console.log(response);
       if (response.data.error === false) {
         localStorage.setItem('access-token', response.data.data.accessToken);
         localStorage.setItem('id', response.data.data.userID);
+        setIsAuthenticated(true);
         refresh();
       }
       return response;
@@ -53,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ loginWithEmail, forgotPassword, register }}>
+    <AuthContext.Provider value={{ isAuthenticated, loginWithEmail, forgotPassword, register }}>
       {children}
     </AuthContext.Provider>
   );
