@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Redirect Protect={Login} />} />
         <Route path="/register" element={<Redirect Protect={Register} />} />
-        <Route path="/dashboard" element={<Protected Protect={Dashboard} />} />
+        <Route path="/dashboard" element={< Dashboard />} />
         <Route path="/test" element={<Protected Protect={Test} />} />
       </Routes>
     </AuthProvider>
