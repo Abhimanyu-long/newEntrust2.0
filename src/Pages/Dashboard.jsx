@@ -9,6 +9,12 @@ import logoDark from "../assets/media/logos/neuralit-logo-dark.png";
 import chart2 from "../assets/media/charts/chart2.jpg";
 import accountManager from "../assets/media/widgets/account-manager.jpg";
 import autopay from "../assets/media/widgets/autopay.png";
+import user1 from "../assets/media/users/user1.jpg";
+import user2 from "../assets/media/users/user2.jpg";
+import user3 from "../assets/media/users/user3.jpg";
+import user4 from "../assets/media/users/user4.jpg";
+import user5 from "../assets/media/users/user5.jpg";
+import user6 from "../assets/media/users/user6.jpg";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -1302,7 +1308,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user1.jpg"
+                                    src={user1}
                                   />
                                 </div>
                                 <div
@@ -1312,7 +1318,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user2.jpg"
+                                    src={user2}
                                   />
                                 </div>
                                 <div
@@ -1322,7 +1328,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user3.jpg"
+                                    src={user3}
                                   />
                                 </div>
                                 <div
@@ -1332,7 +1338,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user4.jpg"
+                                    src={user4}
                                   />
                                 </div>
                                 <div
@@ -1342,7 +1348,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user5.jpg"
+                                    src={user5}
                                   />
                                 </div>
                                 <div
@@ -1352,7 +1358,7 @@ export const Dashboard = () => {
                                 >
                                   <img
                                     alt="Pic"
-                                    src="assets/media/users/user6.jpg"
+                                    src={user6}
                                   />
                                 </div>
                                 <a
