@@ -15,10 +15,11 @@ import user3 from "../assets/media/users/user3.jpg";
 import user4 from "../assets/media/users/user4.jpg";
 import user5 from "../assets/media/users/user5.jpg";
 import user6 from "../assets/media/users/user6.jpg";
+import { useAuth } from "../../context/AuthContext";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
-
+  const { logout } = useAuth();
   const defaultThemeMode = 'light';
 
   const [themeMode, setThemeMode] = useState(() => {
@@ -47,19 +48,18 @@ export const Dashboard = () => {
     setThemeMode(mode);
   };
 
-  const logoutfunction = async () => {
-    const response = await fetch("http://10.10.7.81:8000/auth/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const json = await response.json();
-    console.log(json);
-
-    toast.success(json.message);
-    setTimeout(() => navigate("/"), 500);
+  const Logout = async () => {
+    try {
+      const response = await logout();
+      if (response.status === 200) {
+        toast.success(response.data.message || "Logout successful!");
+        setTimeout(() => navigate("/login"), 500);
+      } else {
+        toast.error(response.data.message || "Logout failed");
+      }
+    } catch (error) {
+      toast.error(error.message || "Logout error");
+    }
   };
 
   return (
@@ -1221,7 +1221,7 @@ export const Dashboard = () => {
                   </div>
 
                   <a
-                    onClick={logoutfunction}
+                  onClick={Logout}
                     className="btn btn-icon btn-active-color-primary btn-icon-custom-color me-n4"
                     data-bs-toggle="tooltip"
                     title="Logout"
